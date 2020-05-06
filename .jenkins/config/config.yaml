@@ -1,0 +1,2 @@
+gradlebuild:
+  gradleArguments: clean build  

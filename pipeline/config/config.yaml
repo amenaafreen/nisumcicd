@@ -1,0 +1,19 @@
+git:
+  credentials: Gitlab-ID
+  url: https://gitlab.mynisum.com/devops/web-app-maven.git
+  branch: master
+mavenBuild:
+  mavenArguments: clean package
+  mavenTestArguments: test
+docker:
+  dockerArguments:
+    artifactId: spring-boot-web
+    artifactVersion: 0.0.1-SNAPSHOT
+    dockerImageName: web-app-maven
+    dockerImageVersion: latest
+clusterConfig:
+  credentialsId: KUBECONFIG-ID
+  namespace: dev-ns
+helmConfig:
+  releaseName: web-app-maven
+  helmChartPath: ./helmchart
