@@ -8,7 +8,7 @@ mavenBuild:
 docker:
   dockerArguments:
     artifactId: spring-boot-web
-    artifactVersion: 0.0.1-SNAPSHOT
+    artifactVersion: 0.0.2-SNAPSHOT
     dockerImageName: web-app-maven
     dockerImageVersion: latest
 clusterConfig:
