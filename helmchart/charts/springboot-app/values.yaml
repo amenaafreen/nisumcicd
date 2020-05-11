@@ -4,7 +4,7 @@ replicaCount: 1
 
 #define the repository path for the image
 imagePullRepository: nexus.mynisum.com:2376/nisum/web-app-maven
-imagePullTag: 0.0.2
+imagePullTag: 0.0.3
 
 imagePullPolicy: Always
 imagePullSecretName: registry-cred
