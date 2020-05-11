@@ -2,9 +2,10 @@ git:
   credentials: Gitlab-ID
   url: https://gitlab.mynisum.com/devops/web-app-maven.git
   branch: master
-mavenBuild:
-  mavenArguments: clean package
-  mavenTestArguments: test
+build:
+  buildType: maven
+  arguments: clean package
+  testArguments: test
 docker:
   dockerArguments:
     artifactId: spring-boot-web
