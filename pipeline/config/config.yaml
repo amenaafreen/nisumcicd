@@ -17,4 +17,4 @@ clusterConfig:
   namespace: dev-ns
 helmConfig:
   releaseName: web-app-maven
-  helmChartPath: ./helmchart
+  helmChartName: helmchart
