@@ -9,9 +9,9 @@ build:
 docker:
   dockerArguments:
     artifactId: spring-boot-web
-    artifactVersion: 0.0.1-SNAPSHOT
+#    artifactVersion: 0.0.1-SNAPSHOT
     dockerImageName: web-app-maven
-    dockerImageVersion: 0.0.3
+#    dockerImageVersion: 0.0.3
 clusterConfig:
   credentialsId: KUBECONFIG-ID
   namespace: dev-ns
