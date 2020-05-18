@@ -1,7 +1,3 @@
-git:
-  credentials: Gitlab-ID
-  url: https://gitlab.mynisum.com/devops/web-app-maven.git
-  branch: master
 build:
   buildType: maven
   arguments: clean package
