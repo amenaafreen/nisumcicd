@@ -1,0 +1,41 @@
+#Default Values for application
+
+replicaCount: 1
+
+#define the repository path for the image
+imagePullRepository: nexus.mynisum.com:2376/nisum/web-app-maven
+imagePullTag: 0.0.3
+
+imagePullPolicy: Always
+imagePullSecretName: registry-cred
+
+#Define service type and servicePort 
+serviceType: ClusterIP
+servicePort: 8080
+targetPort: 8080
+
+#Ingress
+
+ingress:
+  enabled: true
+  # For Kubernetes v1.14+, use 'networking.k8s.io/v1beta1'
+  apiVersion: "extensions/v1beta1"
+  labels: {}
+  annotations:
+  kubernetes.io/ingress.class: nginx
+  kubernetes.io/tls-acme: "true"
+  # configures the hostname e.g. web-app-gradle.mynisum.com
+  hostName: web-app-maven.mynisum.com
+
+  tls:
+    - hosts:
+       - web-app-maven.mynisum.com
+      secretName: mynisum-tls
+  rules:
+    - host: web-app-maven.mynisum.com
+      http:
+        paths:
+         - backend:
+             serviceName: web-app-maven
+             servicePort: 80
+           path: /
