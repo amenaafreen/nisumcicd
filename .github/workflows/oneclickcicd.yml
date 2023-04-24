@@ -1,8 +1,51 @@
 name: oneclick-ci-cd
-on: push
+on:
+  workflow_dispatch:
+  
+env: 
+  TAG: ${{ github.run_number }}
 jobs:
-  maven-build:
+  Maven_Build:
     runs-on: ubuntu-latest
     steps:
-      - name: maven build
-        run: mvn clean package
+      - uses: actions/checkout@v2
+      - name: Build with Maven 
+        run: |
+          mvn clean package
+      - name: Upload Artifacts      
+        uses: actions/upload-artifact@v2
+        with:
+          name: AppArtifacts
+          path: |
+            **/*.jar
+      - name: Branch_Name
+        run: |
+          echo "${{ github.ref_name }}"
+  Sonarqube_Analysis:
+    runs-on: ubuntu-latest
+    needs: Maven_Build
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download Artifact.
+        uses: actions/download-artifact@v2
+        with:
+          name: AppArtifacts 
+      - name: Build
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  
+        run: |
+          mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install org.jacoco:jacoco-maven-plugin:report 
+      - name: Setup JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          overwrite-settings: false
+          distribution: 'adopt'  
+      - name: Sonar analyze
+        continue-on-error: true
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  
+        run: |
+          mvn sonar:sonar -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }}
