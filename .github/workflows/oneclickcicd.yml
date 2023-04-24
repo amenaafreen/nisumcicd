@@ -1,0 +1,8 @@
+name: oneclick-ci-cd
+on: push
+jobs:
+  maven-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: maven build
+        run: mvn clean package
