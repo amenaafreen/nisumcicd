@@ -50,7 +50,7 @@ jobs:
         run: |
           mvn sonar:sonar  -Dmaven.test.skip=true  -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }}
   Docker_build_Docker_Push:
-    runs-on: [ AKS ]
+    runs-on: ubuntu-latest
     needs: [Sonarqube_Analysis]
     steps:
       - uses: actions/checkout@v2    
