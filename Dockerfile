@@ -1,8 +1,5 @@
 FROM openjdk:8-jre-alpine
-ARG artifactid
-ARG version
-ENV artifact ${artifactid}-${version}.jar
 WORKDIR /app
-COPY ./target/${artifact} /app
+COPY ./target/spring-boot-web-0.0.1-SNAPSHOT.jar /app
 ENTRYPOINT ["sh", "-c"]
-CMD ["java -jar ${artifact}"]
+CMD ["java -jar spring-boot-web-0.0.1-SNAPSHOT.jar"]
