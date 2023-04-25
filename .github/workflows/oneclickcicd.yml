@@ -91,9 +91,9 @@ jobs:
           set -e
           if [[ $EXIT_CODE == '0' ]]; then
                   echo "Docker Image found with the given tag. Deploying application."
-                  
-                  cat deploy-manifests.yaml
-                  kubectl apply -f deploy-manifests.yaml
+
+                  kubectl apply -f manifests/deploy.yaml
+                  kubectl apply -f manifests/service.yaml
           else
                   echo "No Docker Image found with the given tag. Skipping deployment." 
                   exit 1
