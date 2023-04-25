@@ -71,6 +71,7 @@ jobs:
           docker push nisumacr.azurecr.io/nisumapp/springboot:${{ github.run_number }}
   app-deploy:
     runs-on: [ ubuntu-latest ]
+    needs: [Docker_build_Docker_Push]
     steps:
       - uses: actions/checkout@v2        
       - name: Set K8s-context   
