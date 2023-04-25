@@ -69,5 +69,34 @@ jobs:
           docker build --tag nisumacr.azurecr.io/nisumapp/springboot:${{ github.run_number }} .       
       - run: |
           docker push nisumacr.azurecr.io/nisumapp/springboot:${{ github.run_number }}
+  app-deploy:
+    runs-on: [ ubuntu-latest ]
+    steps:
+      - uses: actions/checkout@v2        
+      - name: Set K8s-context   
+        uses: azure/k8s-set-context@v3
+        with:
+          kubeconfig: ${{ secrets.AKS_CLUSTER }}          
+      - name: Docker Login    
+        uses: docker/login-action@v2
+        with:
+          registry: nisumacr.azurecr.io
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PWD }}
+      - name: Deploy Application
+        run: |
+          set +e
+          docker manifest inspect nisumacr.azurecr.io/nisumapp/springboot:${{ github.run_number }} >/dev/null 2>&1;
+          EXIT_CODE=$?
+          set -e
+          if [[ $EXIT_CODE == '0' ]]; then
+                  echo "Docker Image found with the given tag. Deploying application."
+                  
+                  cat deploy-manifests.yaml
+                  kubectl apply -f deploy-manifests.yaml
+          else
+                  echo "No Docker Image found with the given tag. Skipping deployment." 
+                  exit 1
+          fi
 
 
