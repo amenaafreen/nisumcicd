@@ -49,3 +49,25 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  
         run: |
           mvn sonar:sonar  -Dmaven.test.skip=true  -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+  Docker_build_Docker_Push:
+    runs-on: [ AKS ]
+    needs: [Sonarqube_Analysis]
+    steps:
+      - uses: actions/checkout@v2    
+      - name: Download Artifact Jarfile.
+        uses: actions/download-artifact@v2
+        with:
+          name: AppArtifacts                 
+      - name: Docker Build     
+        uses: docker/login-action@v2
+        with:
+          registry: nisumacr.azurecr.io
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PWD }}          
+      - name: docker build
+        run: |
+          docker build --tag nisumacr.azurecr.io/nisumapp/springboot:${{ github.run_number }} .       
+      - run: |
+          docker push nisumacr.azurecr.io/nisumapp/springboot:${{ github.run_number }}
+
+
