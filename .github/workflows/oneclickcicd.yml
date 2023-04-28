@@ -93,7 +93,7 @@ jobs:
           if [[ $EXIT_CODE == '0' ]]; then
                   echo "Docker Image found with the given tag. Deploying application."
 
-                  helm template --name-template=web-app-maven helmcharts -f web-app-maven-chart/values.yaml --set app.namespace=webapp,imagePullRepository=nisumacr.azurecr.io/nisumapp,image=webapp:${{ github.run_number }} > deploy-manifests.yaml   
+                  helm template --name-template=web-app-maven web-app-maven-chart -f ./values.yaml --set app.namespace=webapp,imagePullRepository=nisumacr.azurecr.io/nisumapp,image=webapp:${{ github.run_number }} > deploy-manifests.yaml   
                   cat deploy-manifests.yaml
                   kubectl apply -f deploy-manifests.yaml
           else
