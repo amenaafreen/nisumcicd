@@ -10,7 +10,7 @@ imagePullPolicy: Always
 imagePullSecretName: registry-cred
 
 #Define service type and servicePort 
-serviceType: ClusterIP
+serviceType: LoadBalancer
 servicePort: 8080
 targetPort: 8080
 
