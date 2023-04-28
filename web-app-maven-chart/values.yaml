@@ -3,7 +3,7 @@
 replicaCount: 1
 
 #define the repository path for the image
-imagePullRepository: 
+imagePullRepository: nisumacr.azurecr.io/nisumapp
 imagePullTag: 0.0.1-SNAPSHOT
 
 imagePullPolicy: Always
