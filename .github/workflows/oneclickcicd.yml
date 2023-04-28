@@ -61,14 +61,14 @@ jobs:
       - name: Docker Build     
         uses: docker/login-action@v2
         with:
-          registry: nisumacr.azurecr.io
+          registry: nexus.mynisum.com:2376
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_PWD }}          
       - name: docker build
         run: |
-          docker build --tag nisumacr.azurecr.io/nisumapp/webapp:${{ github.run_number }} .       
+          docker build --tag nexus.mynisum.com:2376/nisum/springboot/webapp:${{ github.run_number }} .       
       - run: |
-          docker push nisumacr.azurecr.io/nisumapp/webapp:${{ github.run_number }}
+          docker push nexus.mynisum.com:2376/nisum/springboot/webapp:${{ github.run_number }}
   app-deploy:
     runs-on: [ ubuntu-latest ]
     needs: [Docker_build_Docker_Push]
@@ -87,13 +87,13 @@ jobs:
       - name: Deploy Application
         run: |
           set +e
-          docker manifest inspect nisumacr.azurecr.io/nisumapp/webapp:${{ github.run_number }} >/dev/null 2>&1;
+          docker manifest inspect nexus.mynisum.com:2376/nisum/springboot/webapp:${{ github.run_number }} >/dev/null 2>&1;
           EXIT_CODE=$?
           set -e
           if [[ $EXIT_CODE == '0' ]]; then
                   echo "Docker Image found with the given tag. Deploying application."
 
-                  helm template --name-template=web-app-maven web-app-maven-chart -f web-app-maven-chart/values.yaml --set app.namespace=webapp,imagePullRepository=nisumacr.azurecr.io/nisumapp,image=webapp:${{ github.run_number }} > deploy-manifests.yaml   
+                  helm template --name-template=web-app-maven web-app-maven-chart -f web-app-maven-chart/values.yaml --set app.namespace=webapp,imagePullRepository=nexus.mynisum.com:2376/nisum/springboot,image=webapp:${{ github.run_number }} > deploy-manifests.yaml   
                   cat deploy-manifests.yaml
                   kubectl apply -f deploy-manifests.yaml
           else
