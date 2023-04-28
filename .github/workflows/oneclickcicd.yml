@@ -87,14 +87,15 @@ jobs:
       - name: Deploy Application
         run: |
           set +e
-          docker manifest inspect nisumacr.azurecr.io/nisumapp/springboot:${{ github.run_number }} >/dev/null 2>&1;
+          docker manifest inspect nisumacr.azurecr.io/nisumapp/webapp:${{ github.run_number }} >/dev/null 2>&1;
           EXIT_CODE=$?
           set -e
           if [[ $EXIT_CODE == '0' ]]; then
                   echo "Docker Image found with the given tag. Deploying application."
 
-                  kubectl apply -f manifests/deploy.yaml
-                  kubectl apply -f manifests/service.yaml
+                  helm template --name-template=web-app-maven helmcharts -f web-app-maven-chart/values.yaml --set app.namespace=webapp,imagePullRepository=nisumacr.azurecr.io/nisumapp,image=webapp:${{ github.run_number }} > deploy-manifests.yaml   
+                  cat deploy-manifests.yaml
+                  kubectl apply -f deploy-manifests.yaml
           else
                   echo "No Docker Image found with the given tag. Skipping deployment." 
                   exit 1
